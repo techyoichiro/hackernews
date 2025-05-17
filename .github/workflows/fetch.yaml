@@ -29,3 +29,14 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node dist/scripts/fetchAndSave.js
+
+      - name: Trigger generate-note workflow
+        if: github.event_name == 'schedule'
+        run: |
+          DAY_OF_WEEK=$(date -u +%u)
+          if [ "$DAY_OF_WEEK" = "2" ] || [ "$DAY_OF_WEEK" = "6" ]; then
+            curl -X POST https://api.github.com/repos/${{ github.repository }}/dispatches \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d '{"event_type":"generate-note"}'
+          fi
