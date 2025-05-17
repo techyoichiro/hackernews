@@ -27,6 +27,7 @@ npm install
 ```
 NOTION_TOKEN=your_notion_integration_token
 NOTION_DATABASE_ID=your_notion_database_id
+NOTION_OUTPUT_DATABASE_ID=your_notion_output_database_id
 OPENAI_API_KEY=your_openai_api_key
 ```
 
