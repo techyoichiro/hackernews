@@ -34,13 +34,25 @@ OPENAI_API_KEY=your_openai_api_key
 
 記事の取得と保存：
 ```bash
-npm fetch
+npm start
 ```
 
 週間まとめ記事の生成：
 ```bash
-npm generate
+npm run generate-note
 ```
+
+## GitHub Actions
+
+このリポジトリには2つの自動実行ワークフローが設定されています：
+
+1. 記事取得（`fetch.yaml`）
+   - 毎日0時（UTC）に実行
+   - Hacker Newsのトップ記事を取得し、Notionに保存
+
+2. 週間まとめ生成（`generate-note.yml`）
+   - 毎週火曜と土曜の0時（UTC）に実行
+   - 過去の記事をまとめた記事を生成
 
 ## 必要な環境
 

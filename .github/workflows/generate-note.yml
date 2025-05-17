@@ -1,10 +1,9 @@
-name: Generate Note Article
+name: Generate Weekly Summary
 
 on:
   schedule:
-    # 毎週月曜と木曜の午前9時に実行
-    - cron: '0 0 * * 1,4'
-  workflow_dispatch: # 手動実行も可能
+    - cron: '0 0 * * 2,6'  # 毎週火曜と土曜の0時（UTC）に実行
+  workflow_dispatch:  # 手動実行も可能
 
 jobs:
   generate:
@@ -19,12 +18,14 @@ jobs:
           node-version: '20'
           
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         
-      - name: Generate Note Article
+      - name: Build TypeScript
+        run: npm run build
+        
+      - name: Generate weekly summary
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          NOTION_OUTPUT_DATABASE_ID: ${{ secrets.NOTION_OUTPUT_DATABASE_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npm run generate-note 
+        run: node dist/scripts/generateNoteArticle.js 

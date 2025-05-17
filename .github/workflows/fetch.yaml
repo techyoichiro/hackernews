@@ -1,25 +1,31 @@
-name: Fetch and Save HN Articles
+name: Fetch Hacker News Articles
 
 on:
   schedule:
-    - cron: '0 4 * * 1,4' # 毎週 月・木曜 13:00 JST
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # 毎日0時（UTC）に実行
+  workflow_dispatch:  # 手動実行も可能
 
 jobs:
-  fetch-posts:
+  fetch:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-
-      - name: Install deps
+          node-version: '20'
+          
+      - name: Install dependencies
         run: npm install
-
-      - name: Run script
+        
+      - name: Build TypeScript
+        run: npm run build
+        
+      - name: Run fetch script
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-        run: node scripts/fetchAndSave.js
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node dist/scripts/fetchAndSave.js
