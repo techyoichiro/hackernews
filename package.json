@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start": "node dist/scripts/fetchAndSave.js",
-        "generate-note": "node dist/scripts/generateNoteArticle.js",
+        "start": "tsx scripts/fetchAndSave.ts",
+        "generate-note": "tsx scripts/generateNoteArticle.ts",
         "build": "tsc",
-        "dev": "ts-node --esm scripts/fetchAndSave.ts"
+        "dev": "tsx watch scripts/fetchAndSave.ts"
     },
     "dependencies": {
         "@notionhq/client": "^2.2.14",
@@ -17,7 +17,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.11.24",
-        "ts-node": "^10.9.2",
+        "tsx": "^4.7.1",
         "typescript": "^5.3.3"
     }
 }

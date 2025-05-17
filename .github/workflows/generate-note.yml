@@ -20,12 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Build TypeScript
-        run: npm run build
-        
       - name: Generate weekly summary
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: node dist/scripts/generateNoteArticle.js 
+        run: npm run generate-note 
