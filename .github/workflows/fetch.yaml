@@ -1,0 +1,25 @@
+name: Fetch and Save HN Articles
+
+on:
+  schedule:
+    - cron: '0 4 * * 1,4' # 毎週 月・木曜 13:00 JST
+  workflow_dispatch:
+
+jobs:
+  fetch-posts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: npm install
+
+      - name: Run script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node scripts/fetchAndSave.js
