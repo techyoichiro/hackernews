@@ -2,7 +2,7 @@ name: Fetch Hacker News Articles
 
 on:
   schedule:
-    - cron: '0 15 * * *'  # 毎日0時（UTC）に実行
+    - cron: '0 15 * * *'  # 毎日0時（JST）に実行
   workflow_dispatch:  # 手動実行も可能
 
 jobs:
@@ -34,17 +34,3 @@ jobs:
           ls -la
           echo "Running fetch script..."
           npx tsx scripts/fetchAndSave.ts
-
-      - name: Trigger generate-note workflow
-        if: github.event_name == 'schedule'
-        run: |
-          DAY_OF_WEEK=$(date -u +%u)
-          if [ "$DAY_OF_WEEK" = "2" ] || [ "$DAY_OF_WEEK" = "6" ]; then
-            echo "Triggering generate-note workflow..."
-            curl -X POST https://api.github.com/repos/${{ github.repository }}/dispatches \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              -d '{"event_type":"generate-note"}'
-          else
-            echo "Not a Tuesday or Saturday, skipping generate-note workflow"
-          fi

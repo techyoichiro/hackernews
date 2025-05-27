@@ -141,6 +141,26 @@ async function saveToNotion(content: string, pages: NotionPage[]) {
   }
 }
 
+async function updateArticleStatus(pages: NotionPage[]) {
+  console.log('Updating article status to Completed...')
+  
+  for (const page of pages) {
+    try {
+      await notion.pages.update({
+        page_id: page.id,
+        properties: {
+          Status: {
+            status: { name: 'Completed' },
+          },
+        },
+      })
+      console.log(`✅ Updated status for article: ${page.properties.Name.title[0]?.text.content}`)
+    } catch (error) {
+      console.error(`Failed to update status for article: ${page.properties.Name.title[0]?.text.content}`, error)
+    }
+  }
+}
+
 async function main() {
   try {
     // 過去7日分の記事を取得
@@ -151,6 +171,9 @@ async function main() {
     
     // 生成した記事をNotionに保存
     await saveToNotion(content, pages)
+    
+    // 使用した記事のステータスを更新
+    await updateArticleStatus(pages)
     
     console.log('✅ Note記事を生成してNotionに保存しました')
   } catch (error) {

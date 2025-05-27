@@ -3,6 +3,8 @@ name: Generate Weekly Summary
 on:
   repository_dispatch:
     types: [generate-note]
+  schedule:
+    - cron: '0 16 * * 2,6'  # 火曜日と土曜日の午前1時（JST）に実行
   workflow_dispatch:  # 手動実行も可能
 
 jobs:
